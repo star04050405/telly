@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>telly. 英剧打卡册</title>
+<meta name="theme-color" content="#1C3A2E">
+<meta name="description" content="十二部经典英剧 · 317 格逐集打卡">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon-180.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  background:#F4EFE3;color:#20241F;
+  font-family:'Noto Serif SC','Songti SC',Georgia,serif;
+  min-height:100vh;overflow-x:hidden;
+}
+.g{font-family:'Cormorant Garamond',Georgia,serif}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px 70px}
+.fadein{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+.fadein.in{opacity:1;transform:none}
+/* hero */
+.hero{background:#1C3A2E;color:#F4EFE3;margin:0 -18px;padding:44px 26px 30px;position:relative;overflow:hidden}
+.hero:after{content:'';position:absolute;inset:auto -40px -70px auto;width:220px;height:220px;border:1px solid rgba(201,162,39,.35);border-radius:50%;pointer-events:none}
+.hero:before{content:'';position:absolute;inset:-90px -90px auto auto;width:200px;height:200px;border:1px solid rgba(201,162,39,.25);border-radius:50%;pointer-events:none}
+.eyebrow{font-family:'Cormorant Garamond';font-style:italic;letter-spacing:.3em;font-size:12px;color:#C9A227;margin-bottom:10px}
+h1{font-size:clamp(34px,9vw,50px);font-weight:900;letter-spacing:.02em;line-height:1.15}
+h1 .en{display:block;font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-size:.52em;color:#C9A227;letter-spacing:.06em;margin-top:6px}
+.hstats{display:flex;gap:26px;margin-top:20px}
+.hs b{font-family:'Cormorant Garamond';font-size:34px;font-weight:600;color:#F4EFE3;display:block;line-height:1}
+.hs span{font-size:11px;letter-spacing:.18em;color:rgba(244,239,227,.62)}
+.overall{margin-top:22px;background:rgba(244,239,227,.08);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:13px 15px}
+.ov-t{display:flex;justify-content:space-between;font-size:12px;color:rgba(244,239,227,.75);letter-spacing:.08em;margin-bottom:8px}
+.ov-t b{color:#C9A227;font-family:'Cormorant Garamond';font-size:15px}
+.bar{height:7px;background:rgba(244,239,227,.14);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#C9A227,#E7C968);border-radius:99px;transition:width .5s ease}
+/* 区标题 */
+.sect-h{display:flex;align-items:baseline;gap:12px;margin:34px 0 6px}
+.sect-h .t{font-size:21px;font-weight:900;letter-spacing:.04em}
+.sect-h .e{font-family:'Cormorant Garamond';font-style:italic;color:#8a8578;font-size:14px}
+.sect-h .n{margin-left:auto;font-size:11.5px;color:#8a8578;letter-spacing:.1em}
+.sect-h .n b{color:#1C3A2E;font-family:'Cormorant Garamond';font-size:15px}
+.hint1{text-align:center;font-size:12px;color:#8a8578;letter-spacing:.14em;margin:14px 0 4px}
+/* 剧卡 */
+.drama{border:1.5px solid #20241F;border-radius:16px;overflow:hidden;background:#FDFBF4;margin-bottom:16px;box-shadow:0 1px 0 rgba(32,36,31,.06)}
+.d-h{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer;user-select:none}
+.d-badge{width:46px;height:46px;border-radius:12px;background:#1C3A2E;color:#C9A227;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond';font-size:20px;font-weight:600;flex:none}
+.d-done .d-badge{background:#C9A227;color:#1C3A2E}
+.d-tt{flex:1;min-width:0}
+.d-tt .nm{font-size:17px;font-weight:900;letter-spacing:.02em}
+.d-tt .nm .done-mark{color:#C9A227;font-size:13px;margin-left:6px}
+.d-tt .sub{font-family:'Cormorant Garamond';font-style:italic;font-size:13px;color:#8a8578;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-meta{text-align:right;flex:none}
+.d-meta .pc{font-family:'Cormorant Garamond';font-size:19px;color:#1C3A2E;line-height:1}
+.d-meta .pc b{font-size:25px}
+.d-meta .of{font-size:10.5px;color:#8a8578;letter-spacing:.1em;margin-top:3px}
+.caret{flex:none;font-size:10px;color:#8a8578;transition:transform .3s}
+.drama.open .caret{transform:rotate(180deg)}
+.d-b{display:none;padding:4px 16px 18px}
+.drama.open .d-b{display:block}
+.d-bar{height:5px;background:#E7E0CC;border-radius:99px;overflow:hidden;margin-bottom:14px}
+.d-bar i{display:block;height:100%;width:0%;background:#1C3A2E;border-radius:99px;transition:width .4s ease}
+.drama.done .d-bar i{background:#C9A227}
+.season{margin-bottom:12px}
+.season:last-child{margin-bottom:0}
+.s-l{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.s-l .sn{font-family:'Cormorant Garamond';font-style:italic;font-size:13.5px;color:#8a8578;letter-spacing:.08em}
+.s-l .sl{flex:1;height:1px;background:#E0D8C2}
+.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:7px}
+.cell{
+  position:relative;aspect-ratio:1;border:1.5px solid #C9C2AC;border-radius:9px;
+  background:#FDFBF4;font-family:'Cormorant Garamond';font-size:15px;color:#8a8578;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;
+}
+.cell:active{transform:scale(.92)}
+.cell.on{background:#1C3A2E;border-color:#1C3A2E;color:#E7C968;font-weight:600}
+.cell.on:after{content:'✦';position:absolute;top:-5px;right:-4px;font-size:9px;color:#C9A227}
+.special .sn i{font-style:normal;color:#C9A227}
+.drama.done .d-tt .nm:after{content:'CROWNED';font-family:'Cormorant Garamond';font-style:italic;font-size:10px;letter-spacing:.22em;color:#C9A227;border:1px solid #C9A227;border-radius:99px;padding:2px 8px;margin-left:8px;vertical-align:2px}
+/* footer */
+.foot{text-align:center;margin-top:44px;color:#8a8578;font-size:12.5px;letter-spacing:.12em;line-height:2}
+.foot .fm{font-family:'Cormorant Garamond';font-style:italic;font-size:15px;color:#1C3A2E}
+#toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:#1C3A2E;color:#F4EFE3;font-size:13.5px;letter-spacing:.06em;padding:11px 22px;border-radius:99px;opacity:0;pointer-events:none;transition:all .35s ease;z-index:99;box-shadow:0 8px 24px rgba(28,58,46,.35);border:1px solid rgba(201,162,39,.5)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">BRITISH TELLY LOG</div>
+    <h1>英剧打卡册<span class="en">telly. — one episode at a time</span></h1>
+    <div class="hstats">
+      <div class="hs"><b>12</b><span>部剧</span></div>
+      <div class="hs"><b>317</b><span>格等待</span></div>
+      <div class="hs"><b id="stWatched">0</b><span>已看完</span></div>
+    </div>
+    <div class="overall">
+      <div class="ov-t"><span>全部进度</span><b id="ovP">0 / 317</b></div>
+      <div class="bar"><i id="ovB"></i></div>
+    </div>
+  </header>
+
+  <div class="sect-h"><span class="t">剧架</span><span class="e">The Shelf</span><span class="n">追完一部，点亮一枚 <b>CROWNED</b></span></div>
+  <div class="hint1">点剧名展开 · 点格子=看完一集 · 再点取消</div>
+  <div id="shelf"></div>
+
+  <footer class="foot fadein">
+    <div class="fm">Fancy a cuppa while you watch? ☕</div>
+    <div>十二部 · 三百一十七格 · 慢慢追</div>
+  </footer>
+
+</div>
+<div id="toast"></div>
+<script>
+const SHOWS = [
+{id:'sherlock', cn:'神探夏洛克', en:'Sherlock · 2010–2017', seasons:[{s:'S1',e:3},{s:'S2',e:3},{s:'S3',e:3},{s:'特辑',e:1,special:true},{s:'S4',e:3}]},
+{id:'blackmirror', cn:'黑镜', en:'Black Mirror · 2011–', seasons:[{s:'S1',e:3},{s:'S2',e:3},{s:'S3',e:6},{s:'S4',e:6},{s:'S5',e:3},{s:'S6',e:5},{s:'S7',e:6}]},
+{id:'downton', cn:'唐顿庄园', en:'Downton Abbey · 2010–2015', seasons:[{s:'S1',e:7},{s:'S2',e:9},{s:'S3',e:9},{s:'S4',e:9},{s:'S5',e:9},{s:'S6',e:9}]},
+{id:'peaky', cn:'浴血黑帮', en:'Peaky Blinders · 2013–2022', seasons:[{s:'S1',e:6},{s:'S2',e:6},{s:'S3',e:6},{s:'S4',e:6},{s:'S5',e:6},{s:'S6',e:6}]},
+{id:'fleabag', cn:'伦敦生活', en:'Fleabag · 2016–2019', seasons:[{s:'S1',e:6},{s:'S2',e:6}]},
+{id:'crown', cn:'王冠', en:'The Crown · 2016–2023', seasons:[{s:'S1',e:10},{s:'S2',e:10},{s:'S3',e:10},{s:'S4',e:10},{s:'S5',e:10},{s:'S6',e:10}]},
+{id:'pnp', cn:'傲慢与偏见', en:'Pride & Prejudice · 1995 · BBC', seasons:[{s:'全集',e:6}]},
+{id:'itcrowd', cn:'IT 狂人', en:'The IT Crowd · 2006–2013', seasons:[{s:'S1',e:6},{s:'S2',e:6},{s:'S3',e:6},{s:'S4',e:6},{s:'特辑',e:1,special:true}]},
+{id:'yesminister', cn:'是，大臣', en:'Yes, Minister · 1980–1984', seasons:[{s:'S1',e:7},{s:'S2',e:7},{s:'S3',e:7}]},
+{id:'killingeve', cn:'杀死伊芙', en:'Killing Eve · 2018–2022', seasons:[{s:'S1',e:8},{s:'S2',e:8},{s:'S3',e:8},{s:'S4',e:8}]},
+{id:'normalpeople', cn:'普通人', en:'Normal People · 2020', seasons:[{s:'全集',e:12}]},
+{id:'teotfw', cn:'去他＊的世界', en:'The End of the F***ing World · 2017–2019', seasons:[{s:'S1',e:8},{s:'S2',e:8}]}
+];
+
+// ---------- engine ----------
+const $ = s => document.querySelector(s);
+const KEY = 'telly_done';
+let done = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
+
+const TOTAL = SHOWS.reduce((a,d)=>a+d.seasons.reduce((x,s)=>x+s.e,0),0);
+document.querySelector('.hstats .hs:nth-child(2) b').textContent = TOTAL;
+
+// 渲染剧架
+const shelf = $('#shelf');
+shelf.innerHTML = SHOWS.map((d, di) => {
+  let cells = '', n = 0;
+  const seasonsHtml = d.seasons.map(s => {
+    let cs = '';
+    for (let i=1;i<=s.e;i++){ n++; cs += '<button class="cell" data-k="'+d.id+'-'+s.s+'-'+i+'" data-cn="'+d.cn+'" aria-label="'+d.cn+' '+s.s+' 第'+i+'集">'+i+'</button>'; }
+    return '<div class="season'+(s.special?' special':'')+'"><div class="s-l"><span class="sn">'+s.s+(s.special?' <i>✦</i>':'')+'</span><span class="sl"></span></div><div class="cells">'+cs+'</div></div>';
+  }).join('');
+  return `
+  <section class="drama" id="d-${d.id}">
+    <div class="d-h" data-d="${d.id}" aria-expanded="false">
+      <span class="d-badge">${String(di+1).padStart(2,'0')}</span>
+      <span class="d-tt"><span class="nm">${d.cn}<span class="done-mark"></span></span><span class="sub">${d.en}</span></span>
+      <span class="d-meta"><span class="pc"><b class="pn">0</b>/${n}</span><span class="of">EPISODES</span></span>
+      <span class="caret">▼</span>
+    </div>
+    <div class="d-b"><div class="d-bar"><i></i></div>${seasonsHtml}</div>
+  </section>`;
+}).join('');
+
+// 交互
+shelf.querySelectorAll('.d-h').forEach(h => h.addEventListener('click', () => {
+  const sec = h.closest('.drama');
+  sec.classList.toggle('open');
+  h.setAttribute('aria-expanded', sec.classList.contains('open'));
+}));
+
+function toast(m){
+  const t = $('#toast');
+  t.textContent = m; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 1600);
+}
+
+shelf.querySelectorAll('.cell').forEach(c => c.addEventListener('click', () => {
+  const k = c.dataset.k;
+  if (done.has(k)) done.delete(k);
+  else {
+    done.add(k);
+    const parts = k.split('-');
+    toast('✦ ' + (c.dataset.cn || parts[0]) + ' · ' + parts[1] + ' E' + parts[2] + ' 看完');
+  }
+  localStorage.setItem(KEY, JSON.stringify([...done]));
+  syncAll();
+}));
+
+function syncAll(){
+  let total = 0;
+  SHOWS.forEach((d, di) => {
+    const sec = $('#d-' + d.id);
+    let n = 0;
+    sec.querySelectorAll('.cell').forEach(c => {
+      const on = done.has(c.dataset.k);
+      c.classList.toggle('on', on);
+      if (on) n++;
+    });
+    total += n;
+    const full = n === sec.querySelectorAll('.cell').length;
+    sec.classList.toggle('done', full);
+    sec.querySelector('.pn').textContent = n;
+    sec.querySelector('.d-bar i').style.width = (n / sec.querySelectorAll('.cell').length * 100) + '%';
+    sec.querySelector('.done-mark').textContent = full ? '👑' : '';
+  });
+  $('#stWatched').textContent = total;
+  $('#ovP').textContent = total + ' / ' + TOTAL;
+  $('#ovB').style.width = (total / TOTAL * 100) + '%';
+  if (total === TOTAL) toast('👑 三百一十七格全亮——你把英剧史追完了！');
+}
+syncAll();
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold:.06});
+document.querySelectorAll('.fadein, .drama').forEach(el => io.observe(el));
+
+</script>
+</body>
+</html>
