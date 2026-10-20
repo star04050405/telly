@@ -2,220 +2,701 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>telly. 英剧打卡册</title>
-<meta name="theme-color" content="#1C3A2E">
-<meta name="description" content="十二部经典英剧 · 317 格逐集打卡">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F6F7F9">
+<meta name="description" content="英剧追剧打卡小站：记录你追到的季与集，一键打卡，连续天数与进度一目了然。数据保存在本地浏览器。">
+<title>英剧打卡 · 追剧打卡小站</title>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon-180.png">
 <link rel="manifest" href="manifest.json">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#F6F7F9;
+  --card:#FFFFFF;
+  --line:#E6E9EF;
+  --line-strong:#D5DAE2;
+  --ink:#16181D;
+  --ink-hover:#2A2E36;
+  --ink-2:#5C6572;
+  --ink-3:#6E7784;
+  --link:#0B58CF;
+  --ok:#178A50;
+  --ok-bg:#F0F8F3;
+  --ok-line:#BFE0CC;
+  --danger:#C0392B;
+  --danger-bg:#FBF1EF;
+  --danger-line:#E8C7C0;
+  --r-card:14px;
+  --r-ctl:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
-  background:#F4EFE3;color:#20241F;
-  font-family:'Noto Serif SC','Songti SC',Georgia,serif;
-  min-height:100vh;overflow-x:hidden;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"PingFang SC","HarmonyOS Sans SC","Noto Sans CJK SC","Microsoft YaHei UI","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
 }
-.g{font-family:'Cormorant Garamond',Georgia,serif}
-.wrap{max-width:680px;margin:0 auto;padding:0 18px 70px}
-.fadein{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
-.fadein.in{opacity:1;transform:none}
-/* hero */
-.hero{background:#1C3A2E;color:#F4EFE3;margin:0 -18px;padding:44px 26px 30px;position:relative;overflow:hidden}
-.hero:after{content:'';position:absolute;inset:auto -40px -70px auto;width:220px;height:220px;border:1px solid rgba(201,162,39,.35);border-radius:50%;pointer-events:none}
-.hero:before{content:'';position:absolute;inset:-90px -90px auto auto;width:200px;height:200px;border:1px solid rgba(201,162,39,.25);border-radius:50%;pointer-events:none}
-.eyebrow{font-family:'Cormorant Garamond';font-style:italic;letter-spacing:.3em;font-size:12px;color:#C9A227;margin-bottom:10px}
-h1{font-size:clamp(34px,9vw,50px);font-weight:900;letter-spacing:.02em;line-height:1.15}
-h1 .en{display:block;font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-size:.52em;color:#C9A227;letter-spacing:.06em;margin-top:6px}
-.hstats{display:flex;gap:26px;margin-top:20px}
-.hs b{font-family:'Cormorant Garamond';font-size:34px;font-weight:600;color:#F4EFE3;display:block;line-height:1}
-.hs span{font-size:11px;letter-spacing:.18em;color:rgba(244,239,227,.62)}
-.overall{margin-top:22px;background:rgba(244,239,227,.08);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:13px 15px}
-.ov-t{display:flex;justify-content:space-between;font-size:12px;color:rgba(244,239,227,.75);letter-spacing:.08em;margin-bottom:8px}
-.ov-t b{color:#C9A227;font-family:'Cormorant Garamond';font-size:15px}
-.bar{height:7px;background:rgba(244,239,227,.14);border-radius:99px;overflow:hidden}
-.bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#C9A227,#E7C968);border-radius:99px;transition:width .5s ease}
-/* 区标题 */
-.sect-h{display:flex;align-items:baseline;gap:12px;margin:34px 0 6px}
-.sect-h .t{font-size:21px;font-weight:900;letter-spacing:.04em}
-.sect-h .e{font-family:'Cormorant Garamond';font-style:italic;color:#8a8578;font-size:14px}
-.sect-h .n{margin-left:auto;font-size:11.5px;color:#8a8578;letter-spacing:.1em}
-.sect-h .n b{color:#1C3A2E;font-family:'Cormorant Garamond';font-size:15px}
-.hint1{text-align:center;font-size:12px;color:#8a8578;letter-spacing:.14em;margin:14px 0 4px}
-/* 剧卡 */
-.drama{border:1.5px solid #20241F;border-radius:16px;overflow:hidden;background:#FDFBF4;margin-bottom:16px;box-shadow:0 1px 0 rgba(32,36,31,.06)}
-.d-h{display:flex;align-items:center;gap:13px;padding:15px 16px;cursor:pointer;user-select:none}
-.d-badge{width:46px;height:46px;border-radius:12px;background:#1C3A2E;color:#C9A227;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond';font-size:20px;font-weight:600;flex:none}
-.d-done .d-badge{background:#C9A227;color:#1C3A2E}
-.d-tt{flex:1;min-width:0}
-.d-tt .nm{font-size:17px;font-weight:900;letter-spacing:.02em}
-.d-tt .nm .done-mark{color:#C9A227;font-size:13px;margin-left:6px}
-.d-tt .sub{font-family:'Cormorant Garamond';font-style:italic;font-size:13px;color:#8a8578;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d-meta{text-align:right;flex:none}
-.d-meta .pc{font-family:'Cormorant Garamond';font-size:19px;color:#1C3A2E;line-height:1}
-.d-meta .pc b{font-size:25px}
-.d-meta .of{font-size:10.5px;color:#8a8578;letter-spacing:.1em;margin-top:3px}
-.caret{flex:none;font-size:10px;color:#8a8578;transition:transform .3s}
-.drama.open .caret{transform:rotate(180deg)}
-.d-b{display:none;padding:4px 16px 18px}
-.drama.open .d-b{display:block}
-.d-bar{height:5px;background:#E7E0CC;border-radius:99px;overflow:hidden;margin-bottom:14px}
-.d-bar i{display:block;height:100%;width:0%;background:#1C3A2E;border-radius:99px;transition:width .4s ease}
-.drama.done .d-bar i{background:#C9A227}
-.season{margin-bottom:12px}
-.season:last-child{margin-bottom:0}
-.s-l{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.s-l .sn{font-family:'Cormorant Garamond';font-style:italic;font-size:13.5px;color:#8a8578;letter-spacing:.08em}
-.s-l .sl{flex:1;height:1px;background:#E0D8C2}
-.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:7px}
-.cell{
-  position:relative;aspect-ratio:1;border:1.5px solid #C9C2AC;border-radius:9px;
-  background:#FDFBF4;font-family:'Cormorant Garamond';font-size:15px;color:#8a8578;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s ease;
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;touch-action:manipulation}
+button:disabled{cursor:default}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:8px 14px;border-radius:0 0 8px 0;z-index:99}
+.skip:focus{left:0}
+
+/* ---------- 头部 ---------- */
+.top{background:#fff;border-bottom:1px solid var(--line)}
+.top-in{display:flex;justify-content:space-between;align-items:center;padding:14px 0;gap:14px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .ic-logo{width:27px;height:27px;color:var(--ink);flex:none}
+.brand-name{font-size:17px;font-weight:700;line-height:1.25}
+.brand-sub{display:block;font-size:10px;color:var(--ink-3);letter-spacing:.08em;font-weight:500;white-space:nowrap}
+.top-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--ink-2);flex-wrap:wrap;justify-content:flex-end}
+.streak-badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);border-radius:999px;padding:5px 12px;color:var(--ink);background:var(--bg)}
+.streak-badge b{font-weight:700}
+
+/* ---------- 通用卡片 ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:18px 20px}
+main{padding:26px 0 64px}
+main section{margin-top:30px}
+main section:first-child{margin-top:0}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.sec-head h2{font-size:17px;font-weight:700}
+.sec-count{font-size:13px;color:var(--ink-3)}
+.warn{border:1px solid var(--danger-line);background:var(--danger-bg);color:#9A3324;border-radius:10px;padding:10px 14px;font-size:13px;margin-top:14px}
+
+/* ---------- 今日打卡 ---------- */
+.hero{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;padding:24px}
+.hero-main{flex:1 1 340px;min-width:0}
+.hero-label{font-size:13px;color:var(--ink-2);margin-bottom:8px}
+.hero-title{font-size:clamp(23px,3.4vw,30px);font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.hero-ep{font-size:.5em;font-weight:600;background:#F1F3F6;border-radius:8px;padding:3px 10px;vertical-align:middle;margin-left:8px;white-space:nowrap}
+.hero-meta{font-size:13.5px;color:var(--ink-2);margin-top:8px}
+.hero-actions{margin-left:auto;display:flex;flex-direction:column;gap:9px;align-items:stretch;justify-content:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border-radius:999px;font-weight:600;transition:background .15s,transform .06s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--ink);color:#fff;padding:12px 26px;font-size:15px}
+.btn-primary:hover{background:var(--ink-hover)}
+.btn-big{padding:13px 30px}
+.btn-outline{border:1px solid var(--line-strong);background:#fff;color:var(--ink);padding:9px 16px;font-size:13.5px;font-weight:500}
+.btn-outline:hover{border-color:var(--ink)}
+.btn-outline-danger{border:1px solid var(--danger-line);background:#fff;color:var(--danger);padding:9px 16px;font-size:13.5px;font-weight:500}
+.btn-outline-danger:hover{border-color:var(--danger)}
+.btn-link{color:var(--link);font-size:13.5px;padding:4px 2px;text-align:center}
+.btn-link:hover{text-decoration:underline}
+.hero-foot{flex-basis:100%;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:13px;margin-top:6px;font-size:13px;color:var(--ink-2)}
+.streak-line{display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- 统计 ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat b{display:block;font-size:30px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--ink-2)}
+
+/* ---------- 剧集库 ---------- */
+.toolbar{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);padding:12px 14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.search{display:flex;align-items:center;gap:8px;flex:1 1 220px;min-width:0;border:1px solid var(--line);border-radius:var(--r-ctl);padding:8px 12px;background:var(--bg)}
+.search:focus-within{border-color:var(--ink)}
+.search .ic{width:15px;height:15px;color:var(--ink-3);flex:none}
+.search input{border:none;background:none;outline:none;width:100%;font:inherit;font-size:13.5px;color:var(--ink)}
+.search input::placeholder{color:var(--ink-3)}
+.tabs{display:inline-flex;background:#EDF0F4;border-radius:999px;padding:3px;gap:2px;flex:none}
+.tab{padding:5px 14px;border-radius:999px;font-size:13px;color:var(--ink-2)}
+.tab.is-on{background:#fff;color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:12.5px;color:var(--ink-2);background:#fff}
+.chip:hover{border-color:var(--ink-3)}
+.chip.is-on{border-color:var(--ink);color:var(--ink);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
+.show{padding:18px}
+.show-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.show-name{font-size:16.5px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
+.show-en{font-size:12px;color:var(--ink-3);margin-top:3px}
+.tag-row{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.genre{font-size:11.5px;color:var(--ink-2);border:1px solid var(--line);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.genre-done{color:var(--ok);border-color:var(--ok-line);background:var(--ok-bg);display:inline-flex;align-items:center;gap:4px;font-weight:600}
+.prog-row{display:flex;align-items:center;gap:12px;margin-top:13px}
+.bar{flex:1;height:6px;border-radius:999px;background:#E9EDF2;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink);border-radius:999px;transition:width .25s}
+.prog-num{font-size:12.5px;color:var(--ink-2);flex:none}
+.show-ops{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.seg{display:inline-flex;background:#EDF0F4;border-radius:999px;padding:2px;gap:2px}
+.seg-btn{padding:4px 11px;border-radius:999px;font-size:12.5px;color:var(--ink-2)}
+.seg-btn.is-on{background:var(--ink);color:#fff;font-weight:600}
+.eps-toggle{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--ink-2);padding:5px 8px;border-radius:var(--r-ctl)}
+.eps-toggle:hover{color:var(--ink)}
+.eps-toggle .ic{width:14px;height:14px;transition:transform .15s}
+.eps-toggle[aria-expanded="true"] .ic{transform:rotate(180deg)}
+.eps{margin-top:14px;border-top:1px solid var(--line);padding-top:13px}
+.season-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:11px}
+.s-chips{display:flex;flex-wrap:wrap;gap:5px}
+.s-chip{border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--ink-2);background:#fff}
+.s-chip:hover{border-color:var(--ink-3)}
+.s-chip.is-on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.bulk{display:flex;gap:10px}
+.mini{font-size:12px;color:var(--ink-2);padding:3px 2px}
+.mini:hover{color:var(--ink);text-decoration:underline}
+.mini-danger:hover{color:var(--danger)}
+.ep-grid{display:flex;flex-wrap:wrap;gap:6px}
+.ep{width:38px;height:38px;border:1px solid var(--line-strong);border-radius:8px;background:#fff;font-size:13px;color:var(--ink);transition:background .12s,border-color .12s}
+.ep:hover{border-color:var(--ink)}
+.ep.is-w{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.ep.is-next{border-style:dashed;border-color:var(--ink)}
+.show-note{font-size:12px;color:var(--ink-3);margin-top:11px;line-height:1.7}
+.lib-empty{text-align:center;padding:34px 16px}
+.empty-t{font-size:15px;font-weight:600}
+.empty-d{font-size:13px;color:var(--ink-3);margin:6px 0 12px}
+
+/* ---------- 打卡记录 ---------- */
+#logList{padding:6px 20px}
+.log-row{display:grid;grid-template-columns:128px 1fr auto;gap:4px 12px;align-items:baseline;padding:11px 0}
+.log-row + .log-row{border-top:1px solid var(--line)}
+.log-date{font-size:13px;color:var(--ink-3)}
+.log-show{font-size:14px;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.log-eps{font-size:13px;color:var(--ink-2);text-align:right}
+.log-more{font-size:12px;color:var(--ink-3);padding:12px 0 6px}
+.log-empty{padding:26px 0}
+
+/* ---------- 数据与备份 ---------- */
+.data-ops{display:flex;gap:10px;flex-wrap:wrap}
+.data-note{font-size:13px;color:var(--ink-2);margin-top:13px;max-width:62ch;line-height:1.8}
+#importMsg{font-size:13px;color:var(--danger);margin-top:10px;line-height:1.7}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:1px solid var(--line);background:#fff}
+footer .wrap{padding:22px 22px 42px;font-size:12.5px;color:var(--ink-3);line-height:1.9}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:13.5px;display:flex;gap:14px;align-items:center;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:60;max-width:calc(100vw - 40px)}
+#toast.show{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.toast-btn{color:#fff;font-weight:600;text-decoration:underline;flex:none}
+
+/* ---------- 确认弹窗 ---------- */
+.overlay{position:fixed;inset:0;background:rgba(22,24,29,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:70}
+.dialog{background:#fff;border-radius:var(--r-card);padding:22px;max-width:420px;width:100%}
+.dialog h3{font-size:16px;font-weight:700}
+.dialog p{font-size:14px;color:var(--ink-2);margin-top:10px;line-height:1.75}
+.dialog-ops{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr)}
 }
-.cell:active{transform:scale(.92)}
-.cell.on{background:#1C3A2E;border-color:#1C3A2E;color:#E7C968;font-weight:600}
-.cell.on:after{content:'✦';position:absolute;top:-5px;right:-4px;font-size:9px;color:#C9A227}
-.special .sn i{font-style:normal;color:#C9A227}
-.drama.done .d-tt .nm:after{content:'CROWNED';font-family:'Cormorant Garamond';font-style:italic;font-size:10px;letter-spacing:.22em;color:#C9A227;border:1px solid #C9A227;border-radius:99px;padding:2px 8px;margin-left:8px;vertical-align:2px}
-/* footer */
-.foot{text-align:center;margin-top:44px;color:#8a8578;font-size:12.5px;letter-spacing:.12em;line-height:2}
-.foot .fm{font-family:'Cormorant Garamond';font-style:italic;font-size:15px;color:#1C3A2E}
-#toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);background:#1C3A2E;color:#F4EFE3;font-size:13.5px;letter-spacing:.06em;padding:11px 22px;border-radius:99px;opacity:0;pointer-events:none;transition:all .35s ease;z-index:99;box-shadow:0 8px 24px rgba(28,58,46,.35);border:1px solid rgba(201,162,39,.5)}
-#toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:680px){
+  .grid{grid-template-columns:1fr}
+  .brand-sub{display:none}
+  .top-meta{font-size:12px}
+  .top-meta .num{white-space:nowrap}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .hero{padding:20px}
+  .hero-actions{margin-left:0;flex-direction:row;align-items:center;width:100%}
+  .hero-actions .btn-primary{flex:1}
+  .toolbar{align-items:stretch}
+  .search{flex-basis:100%}
+  .log-row{display:flex;flex-wrap:wrap;gap:2px 12px}
+  .log-eps{text-align:left;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<a class="skip" href="#today">跳到今日打卡</a>
 
-  <header class="hero">
-    <div class="eyebrow">BRITISH TELLY LOG</div>
-    <h1>英剧打卡册<span class="en">telly. — one episode at a time</span></h1>
-    <div class="hstats">
-      <div class="hs"><b>12</b><span>部剧</span></div>
-      <div class="hs"><b>317</b><span>格等待</span></div>
-      <div class="hs"><b id="stWatched">0</b><span>已看完</span></div>
+<header class="top">
+  <div class="wrap top-in">
+    <div class="brand">
+      <svg class="ic-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <rect x="3" y="8" width="18" height="13" rx="2.5"/>
+        <path d="m8 2.5 4 5.5 4-5.5"/>
+        <path d="M7.5 12.5h9M7.5 16h5"/>
+      </svg>
+      <div>
+        <span class="brand-name">英剧打卡</span>
+        <span class="brand-sub">BRITISH DRAMA CHECK-IN</span>
+      </div>
     </div>
-    <div class="overall">
-      <div class="ov-t"><span>全部进度</span><b id="ovP">0 / 317</b></div>
-      <div class="bar"><i id="ovB"></i></div>
+    <div class="top-meta">
+      <span class="num" id="hdrDate"></span>
+      <span class="streak-badge">
+        <svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4"/><path d="m9 14.5 2 2 4-4"/></svg>
+        连续 <b class="num" id="hdrStreak">0</b> 天
+      </span>
     </div>
-  </header>
+  </div>
+</header>
 
-  <div class="sect-h"><span class="t">剧架</span><span class="e">The Shelf</span><span class="n">追完一部，点亮一枚 <b>CROWNED</b></span></div>
-  <div class="hint1">点剧名展开 · 点格子=看完一集 · 再点取消</div>
-  <div id="shelf"></div>
+<main class="wrap">
+  <div id="storageWarn" class="warn" role="alert" hidden>无法写入浏览器本地存储（可能处于无痕 / 隐私模式），打卡数据将不会被保存。请切换到普通模式后重试。</div>
 
-  <footer class="foot fadein">
-    <div class="fm">Fancy a cuppa while you watch? ☕</div>
-    <div>十二部 · 三百一十七格 · 慢慢追</div>
-  </footer>
+  <section id="today" data-section="today" aria-label="今日打卡"></section>
 
+  <section id="stats" data-section="stats" aria-label="统计">
+    <div class="stat-grid">
+      <div class="card stat"><b id="stWatched" class="num">0</b><span>已看集数</span></div>
+      <div class="card stat"><b id="stWeek" class="num">0</b><span>本周打卡</span></div>
+      <div class="card stat"><b id="stStreak" class="num">0</b><span>连续天数</span></div>
+      <div class="card stat"><b id="stDone" class="num">0</b><span>追完的剧</span></div>
+    </div>
+  </section>
+
+  <section id="library" data-section="library" aria-label="剧集库">
+    <div class="sec-head"><h2>剧集库</h2><span class="sec-count num" id="libCount"></span></div>
+    <div class="toolbar">
+      <label class="search">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3"/></svg>
+        <input id="searchInput" type="search" placeholder="搜索剧名，如：神探" aria-label="搜索剧集">
+      </label>
+      <div class="tabs" id="statusTabs" role="group" aria-label="按状态筛选">
+        <button class="tab is-on" data-action="tab" data-v="all">全部</button>
+        <button class="tab" data-action="tab" data-v="watching">在追</button>
+        <button class="tab" data-action="tab" data-v="wishlist">想看</button>
+        <button class="tab" data-action="tab" data-v="done">看完</button>
+      </div>
+      <div class="chips" id="genreChips" role="group" aria-label="按类型筛选">
+        <button class="chip is-on" data-action="genre" data-v="all">全部</button>
+        <button class="chip" data-action="genre" data-v="mystery">悬疑推理</button>
+        <button class="chip" data-action="genre" data-v="scifi">科幻</button>
+        <button class="chip" data-action="genre" data-v="period">年代史诗</button>
+        <button class="chip" data-action="genre" data-v="comedy">喜剧</button>
+      </div>
+    </div>
+    <div class="grid" id="libGrid"></div>
+  </section>
+
+  <section id="log" data-section="log" aria-label="最近打卡">
+    <div class="sec-head"><h2>最近打卡</h2></div>
+    <div class="card" id="logList"></div>
+  </section>
+
+  <section id="data" data-section="data" aria-label="数据与备份">
+    <div class="sec-head"><h2>数据与备份</h2></div>
+    <div class="card">
+      <div class="data-ops">
+        <button class="btn-outline btn" data-action="export">
+          <svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19.5h14"/></svg>
+          导出备份
+        </button>
+        <button class="btn-outline btn" data-action="import">
+          <svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 15V4m0 0 4 4m-4-4-4 4M5 19.5h14"/></svg>
+          导入备份
+        </button>
+        <button class="btn-outline-danger btn" data-action="reset">
+          <svg class="ic" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.5 6.5h15M9.5 6.2V4.8A1.3 1.3 0 0 1 10.8 3.5h2.4a1.3 1.3 0 0 1 1.3 1.3v1.4M6.5 6.5l.8 11.6a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.8-11.6"/></svg>
+          清空全部数据
+        </button>
+      </div>
+      <p class="data-note">打卡数据只保存在这台设备的浏览器里，不会自动同步。换设备、换浏览器或清理浏览器数据前，先导出 JSON 备份，再到新环境导入即可无缝接着追。</p>
+      <p id="importMsg" role="alert" hidden></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    剧集季数与集数按公开播出资料整理，特别篇的计入口径见各剧卡片下方的注释。所有打卡数据仅保存在你的浏览器本地，本站没有账号体系，也不上传任何数据。
+  </div>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgBody">
+    <h3 id="dlgTitle">清空全部打卡数据？</h3>
+    <p id="dlgBody">已看的集数、每部剧的状态和全部打卡记录都会被删掉，且无法恢复。想留底的话，先点「导出备份」。</p>
+    <div class="dialog-ops">
+      <button class="btn-outline btn" id="dlgCancel" data-action="reset-cancel">取消</button>
+      <button class="btn btn-primary" data-action="reset-confirm" style="padding:9px 18px;font-size:13.5px;background:var(--danger)">确认清空</button>
+    </div>
+  </div>
 </div>
-<div id="toast"></div>
+
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<noscript><div style="max-width:1060px;margin:30px auto;padding:0 22px;color:#9A3324">这个打卡站需要启用 JavaScript 才能使用。</div></noscript>
+
 <script>
-const SHOWS = [
-{id:'sherlock', cn:'神探夏洛克', en:'Sherlock · 2010–2017', seasons:[{s:'S1',e:3},{s:'S2',e:3},{s:'S3',e:3},{s:'特辑',e:1,special:true},{s:'S4',e:3}]},
-{id:'blackmirror', cn:'黑镜', en:'Black Mirror · 2011–', seasons:[{s:'S1',e:3},{s:'S2',e:3},{s:'S3',e:6},{s:'S4',e:6},{s:'S5',e:3},{s:'S6',e:5},{s:'S7',e:6}]},
-{id:'downton', cn:'唐顿庄园', en:'Downton Abbey · 2010–2015', seasons:[{s:'S1',e:7},{s:'S2',e:9},{s:'S3',e:9},{s:'S4',e:9},{s:'S5',e:9},{s:'S6',e:9}]},
-{id:'peaky', cn:'浴血黑帮', en:'Peaky Blinders · 2013–2022', seasons:[{s:'S1',e:6},{s:'S2',e:6},{s:'S3',e:6},{s:'S4',e:6},{s:'S5',e:6},{s:'S6',e:6}]},
-{id:'fleabag', cn:'伦敦生活', en:'Fleabag · 2016–2019', seasons:[{s:'S1',e:6},{s:'S2',e:6}]},
-{id:'crown', cn:'王冠', en:'The Crown · 2016–2023', seasons:[{s:'S1',e:10},{s:'S2',e:10},{s:'S3',e:10},{s:'S4',e:10},{s:'S5',e:10},{s:'S6',e:10}]},
-{id:'pnp', cn:'傲慢与偏见', en:'Pride & Prejudice · 1995 · BBC', seasons:[{s:'全集',e:6}]},
-{id:'itcrowd', cn:'IT 狂人', en:'The IT Crowd · 2006–2013', seasons:[{s:'S1',e:6},{s:'S2',e:6},{s:'S3',e:6},{s:'S4',e:6},{s:'特辑',e:1,special:true}]},
-{id:'yesminister', cn:'是，大臣', en:'Yes, Minister · 1980–1984', seasons:[{s:'S1',e:7},{s:'S2',e:7},{s:'S3',e:7}]},
-{id:'killingeve', cn:'杀死伊芙', en:'Killing Eve · 2018–2022', seasons:[{s:'S1',e:8},{s:'S2',e:8},{s:'S3',e:8},{s:'S4',e:8}]},
-{id:'normalpeople', cn:'普通人', en:'Normal People · 2020', seasons:[{s:'全集',e:12}]},
-{id:'teotfw', cn:'去他＊的世界', en:'The End of the F***ing World · 2017–2019', seasons:[{s:'S1',e:8},{s:'S2',e:8}]}
+'use strict';
+/* ================= 剧集数据（按公开播出资料整理；特别篇口径见注释） ================= */
+var SHOWS=[
+ {id:'sherlock',name:'神探夏洛克',en:'Sherlock',year:2010,net:'BBC',genre:'mystery',seasons:[3,3,3,3],note:'2016 圣诞特别篇《可恶的新娘》未计入'},
+ {id:'doctorwho',name:'神秘博士',en:'Doctor Who',year:2005,net:'BBC',genre:'scifi',seasons:[13,13,13,13,13,13,13,12,12,12,10,10,6,8],note:'2005 版第一至第十四季；圣诞特别篇与周年特别篇未计入'},
+ {id:'downton',name:'唐顿庄园',en:'Downton Abbey',year:2010,net:'ITV',genre:'period',seasons:[7,9,9,9,9,9],note:'各季圣诞特别篇计入对应季'},
+ {id:'peaky',name:'浴血黑帮',en:'Peaky Blinders',year:2013,net:'BBC',genre:'period',seasons:[6,6,6,6,6,6]},
+ {id:'crown',name:'王冠',en:'The Crown',year:2016,net:'Netflix',genre:'period',seasons:[10,10,10,10,10,10]},
+ {id:'blackmirror',name:'黑镜',en:'Black Mirror',year:2011,net:'Ch4 → Netflix',genre:'scifi',seasons:[3,3,6,6,3,5,6],note:'《白色圣诞》与《潘达斯奈基》未计入'},
+ {id:'fleabag',name:'伦敦生活',en:'Fleabag',year:2016,net:'Ch4',genre:'comedy',seasons:[6,6]},
+ {id:'itcrowd',name:'IT狂人',en:'The IT Crowd',year:2006,net:'Ch4',genre:'comedy',seasons:[6,6,6,6],note:'2013 终章特别篇未计入'},
+ {id:'blackbooks',name:'布莱克书店',en:'Black Books',year:2000,net:'Ch4',genre:'comedy',seasons:[6,6,6]},
+ {id:'yesminister',name:'是大臣',en:'Yes, Minister',year:1980,net:'BBC',genre:'comedy',seasons:[7,7,7],note:'1984 特别篇未计入'},
+ {id:'inside9',name:'九号秘事',en:'Inside No. 9',year:2014,net:'BBC',genre:'mystery',seasons:[6,6,6,6,6,6,7,6,6],note:'2022 圣诞特别篇《圣尼古拉斯的骨头》计入第七季'},
+ {id:'blackadder',name:'黑爵士',en:'Blackadder',year:1983,net:'BBC',genre:'comedy',seasons:[6,6,6,6],note:'各特别篇未计入'}
 ];
+var GENRE_NAME={mystery:'悬疑推理',scifi:'科幻',period:'年代史诗',comedy:'喜剧'};
+var ICON_CAL='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4"/><path d="m9 14.5 2 2 4-4"/></svg>';
+var ICON_CHECK='<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+var ICON_CHEV='<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m7 10 5 5 5-5"/></svg>';
 
-// ---------- engine ----------
-const $ = s => document.querySelector(s);
-const KEY = 'telly_done';
-let done = new Set(JSON.parse(localStorage.getItem(KEY) || '[]'));
-
-const TOTAL = SHOWS.reduce((a,d)=>a+d.seasons.reduce((x,s)=>x+s.e,0),0);
-document.querySelector('.hstats .hs:nth-child(2) b').textContent = TOTAL;
-
-// 渲染剧架
-const shelf = $('#shelf');
-shelf.innerHTML = SHOWS.map((d, di) => {
-  let cells = '', n = 0;
-  const seasonsHtml = d.seasons.map(s => {
-    let cs = '';
-    for (let i=1;i<=s.e;i++){ n++; cs += '<button class="cell" data-k="'+d.id+'-'+s.s+'-'+i+'" data-cn="'+d.cn+'" aria-label="'+d.cn+' '+s.s+' 第'+i+'集">'+i+'</button>'; }
-    return '<div class="season'+(s.special?' special':'')+'"><div class="s-l"><span class="sn">'+s.s+(s.special?' <i>✦</i>':'')+'</span><span class="sl"></span></div><div class="cells">'+cs+'</div></div>';
-  }).join('');
-  return `
-  <section class="drama" id="d-${d.id}">
-    <div class="d-h" data-d="${d.id}" aria-expanded="false">
-      <span class="d-badge">${String(di+1).padStart(2,'0')}</span>
-      <span class="d-tt"><span class="nm">${d.cn}<span class="done-mark"></span></span><span class="sub">${d.en}</span></span>
-      <span class="d-meta"><span class="pc"><b class="pn">0</b>/${n}</span><span class="of">EPISODES</span></span>
-      <span class="caret">▼</span>
-    </div>
-    <div class="d-b"><div class="d-bar"><i></i></div>${seasonsHtml}</div>
-  </section>`;
-}).join('');
-
-// 交互
-shelf.querySelectorAll('.d-h').forEach(h => h.addEventListener('click', () => {
-  const sec = h.closest('.drama');
-  sec.classList.toggle('open');
-  h.setAttribute('aria-expanded', sec.classList.contains('open'));
-}));
-
-function toast(m){
-  const t = $('#toast');
-  t.textContent = m; t.classList.add('show');
-  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 1600);
+/* ================= 本地存储 ================= */
+var KEY='ukdrama.checkin.v1';
+function load(){
+  try{
+    var raw=localStorage.getItem(KEY);
+    if(!raw)return null;
+    var o=JSON.parse(raw);
+    if(!o||typeof o!=='object')return null;
+    return {status:o.status&&typeof o.status==='object'?o.status:{},watched:o.watched&&typeof o.watched==='object'?o.watched:{},log:Array.isArray(o.log)?o.log:[]};
+  }catch(e){return null;}
 }
+var store=load()||{status:{},watched:{},log:[]};
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(store));document.getElementById('storageWarn').hidden=true;}
+  catch(e){document.getElementById('storageWarn').hidden=false;}
+}
+var ui={q:'',tab:'all',genre:'all',open:{},season:{},swap:0};
 
-shelf.querySelectorAll('.cell').forEach(c => c.addEventListener('click', () => {
-  const k = c.dataset.k;
-  if (done.has(k)) done.delete(k);
-  else {
-    done.add(k);
-    const parts = k.split('-');
-    toast('✦ ' + (c.dataset.cn || parts[0]) + ' · ' + parts[1] + ' E' + parts[2] + ' 看完');
+/* ================= 工具函数 ================= */
+function $(id){return document.getElementById(id);}
+function byId(id){for(var i=0;i<SHOWS.length;i++)if(SHOWS[i].id===id)return SHOWS[i];return null;}
+function total(s){var n=0;for(var i=0;i<s.seasons.length;i++)n+=s.seasons[i];return n;}
+function watchedList(id){return store.watched[id]||[];}
+function isW(id,s,e){return watchedList(id).indexOf(s+'-'+e)>=0;}
+function setW(id,s,e,v){
+  var arr=store.watched[id]||(store.watched[id]=[]);
+  var k=s+'-'+e,i=arr.indexOf(k);
+  if(v&&i<0)arr.push(k);
+  if(!v&&i>=0)arr.splice(i,1);
+}
+function watchedCount(id){return watchedList(id).length;}
+function totalWatched(){var n=0;for(var i=0;i<SHOWS.length;i++)n+=watchedCount(SHOWS[i].id);return n;}
+function doneCount(){var n=0;for(var i=0;i<SHOWS.length;i++){if(total(SHOWS[i])>0&&watchedCount(SHOWS[i].id)===total(SHOWS[i]))n++;}return n;}
+function firstUnwatched(s){
+  for(var si=0;si<s.seasons.length;si++)
+    for(var e=1;e<=s.seasons[si];e++)
+      if(!isW(s.id,si+1,e))return {s:si+1,e:e};
+  return null;
+}
+function pad(n){return String(n).length<2?'0'+n:String(n);}
+function todayStr(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function addDays(ds,n){var d=new Date(ds+'T00:00:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function cnDate(ds){var d=new Date(ds+'T00:00:00');if(isNaN(d.getTime()))return ds;return (d.getMonth()+1)+'月'+d.getDate()+'日 周'+'日一二三四五六'.charAt(d.getDay());}
+function dateSet(){var set={};for(var i=0;i<store.log.length;i++)set[store.log[i].d]=true;return set;}
+function streak(){
+  var set=dateSet();if(!set[todayStr()]&&!set[addDays(todayStr(),-1)])return 0;
+  var d=set[todayStr()]?todayStr():addDays(todayStr(),-1),n=0;
+  while(set[d]){n++;d=addDays(d,-1);}
+  return n;
+}
+function weekCount(){
+  var t=new Date(),mon=new Date(t);
+  mon.setDate(t.getDate()-((t.getDay()+6)%7));
+  var m=mon.getFullYear()+'-'+pad(mon.getMonth()+1)+'-'+pad(mon.getDate());
+  var n=0;for(var i=0;i<store.log.length;i++)if(store.log[i].d>=m)n++;
+  return n;
+}
+function lastDate(id){for(var i=0;i<store.log.length;i++)if(store.log[i].id===id)return store.log[i].d;return '';}
+function heroCands(){
+  var c=[];
+  for(var i=0;i<SHOWS.length;i++){
+    var s=SHOWS[i];
+    if(store.status[s.id]!=='watching')continue;
+    var nx=firstUnwatched(s);
+    if(nx)c.push({s:s,next:nx,last:lastDate(s.id)});
   }
-  localStorage.setItem(KEY, JSON.stringify([...done]));
-  syncAll();
-}));
-
-function syncAll(){
-  let total = 0;
-  SHOWS.forEach((d, di) => {
-    const sec = $('#d-' + d.id);
-    let n = 0;
-    sec.querySelectorAll('.cell').forEach(c => {
-      const on = done.has(c.dataset.k);
-      c.classList.toggle('on', on);
-      if (on) n++;
-    });
-    total += n;
-    const full = n === sec.querySelectorAll('.cell').length;
-    sec.classList.toggle('done', full);
-    sec.querySelector('.pn').textContent = n;
-    sec.querySelector('.d-bar i').style.width = (n / sec.querySelectorAll('.cell').length * 100) + '%';
-    sec.querySelector('.done-mark').textContent = full ? '👑' : '';
-  });
-  $('#stWatched').textContent = total;
-  $('#ovP').textContent = total + ' / ' + TOTAL;
-  $('#ovB').style.width = (total / TOTAL * 100) + '%';
-  if (total === TOTAL) toast('👑 三百一十七格全亮——你把英剧史追完了！');
+  c.sort(function(a,b){return (b.last||'').localeCompare(a.last||'');});
+  return c;
 }
-syncAll();
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
 
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-}), {threshold:.06});
-document.querySelectorAll('.fadein, .drama').forEach(el => io.observe(el));
+/* ================= 渲染 ================= */
+function renderStats(){
+  $('stWatched').textContent=totalWatched();
+  $('stWeek').textContent=weekCount();
+  $('stStreak').textContent=streak();
+  $('stDone').textContent=doneCount();
+  $('hdrStreak').textContent=streak();
+  $('hdrDate').textContent=cnDate(todayStr());
+}
+function footLine(){
+  var t=todayStr(),n=0;
+  for(var i=0;i<store.log.length;i++)if(store.log[i].d===t)n++;
+  return '<span class="streak-line">'+ICON_CAL+'已连续打卡 '+streak()+' 天</span><span>'+(n?'今日已打卡 '+n+' 集':'今日还没打卡')+'</span>';
+}
+function renderHero(){
+  var cands=heroCands(),html='';
+  if(!cands.length){
+    var anyWatching=false;
+    for(var i=0;i<SHOWS.length;i++)if(store.status[SHOWS[i].id]==='watching')anyWatching=true;
+    if(anyWatching){
+      html='<div class="card hero"><div class="hero-main"><div class="hero-label">追剧进度</div><h2 class="hero-title">在追的都看完了</h2><p class="hero-meta">这几部已全部打卡完毕。去剧集库把它们标成「看完」，再挑一部新的开始。</p></div><div class="hero-actions"><button class="btn btn-primary" data-action="goto-lib">去挑一部</button></div><div class="hero-foot">'+footLine()+'</div></div>';
+    }else{
+      html='<div class="card hero"><div class="hero-main"><div class="hero-label">开始追剧</div><h2 class="hero-title">今晚看哪部英剧？</h2><p class="hero-meta">把想追的剧标为「在追」，这里就会替你记住该看第几集——看完一集，回来打一次卡。</p></div><div class="hero-actions"><button class="btn btn-primary" data-action="goto-lib">去剧集库挑一部</button></div><div class="hero-foot">'+footLine()+'</div></div>';
+    }
+  }else{
+    var c=cands[ui.swap%cands.length],s=c.s,cnt=watchedCount(s.id),tt=total(s);
+    var todayN=0,t=todayStr();
+    for(var j=0;j<store.log.length;j++)if(store.log[j].d===t)todayN++;
+    var btnTxt=todayN?'打卡下一集':'打卡这一集';
+    var lastTxt=c.last?('上次打卡 '+cnDate(c.last)):'刚开始追';
+    html='<div class="card hero"><div class="hero-main"><div class="hero-label">今晚接着看</div><h2 class="hero-title">《'+esc(s.name)+'》<span class="hero-ep num">S'+c.next.s+'E'+c.next.e+'</span></h2><p class="hero-meta">第 '+c.next.s+' 季 第 '+c.next.e+' 集 · 全剧 '+cnt+' / '+tt+' 集 · '+lastTxt+'</p></div><div class="hero-actions"><button class="btn btn-primary btn-big" data-action="checkin" data-id="'+s.id+'">'+btnTxt+'</button>'+(cands.length>1?'<button class="btn-link" data-action="swap">换一部</button>':'')+'</div><div class="hero-foot">'+footLine()+'</div></div>';
+  }
+  $('today').innerHTML=html;
+}
+function showCard(s){
+  var cnt=watchedCount(s.id),tt=total(s),done=tt>0&&cnt===tt,st=store.status[s.id]||'';
+  var open=!!ui.open[s.id];
+  var nx=firstUnwatched(s);
+  var sel=ui.season[s.id]||(nx?nx.s:1);
+  if(sel<1||sel>s.seasons.length)sel=1;
+  var pct=tt?Math.round(cnt/tt*100):0;
+  var segs='',chips='',eps='';
+  var sv=[['wishlist','想看'],['watching','在追'],['done','看完']];
+  for(var i=0;i<sv.length;i++){
+    var v=sv[i][0],on=st===v;
+    segs+='<button class="seg-btn'+(on?' is-on':'')+'" data-action="set-status" data-id="'+s.id+'" data-v="'+v+'" aria-pressed="'+on+'">'+sv[i][1]+'</button>';
+  }
+  for(var si=0;si<s.seasons.length;si++){
+    var on2=(si+1)===sel;
+    chips+='<button class="s-chip num'+(on2?' is-on':'')+'" data-action="sel-season" data-id="'+s.id+'" data-s="'+(si+1)+'">S'+(si+1)+'</button>';
+  }
+  for(var e=1;e<=s.seasons[sel-1];e++){
+    var w=isW(s.id,sel,e),isNext=nx&&nx.s===sel&&nx.e===e;
+    eps+='<button class="ep num'+(w?' is-w':'')+(isNext?' is-next':'')+'" data-action="toggle-ep" data-id="'+s.id+'" data-s="'+sel+'" data-e="'+e+'" aria-pressed="'+w+'" aria-label="'+esc(s.name)+' 第'+sel+'季第'+e+'集'+(w?'，已看':'，未看')+'，点按切换">'+e+'</button>';
+  }
+  return '<article class="show card" data-id="'+s.id+'">'
+    +'<div class="show-top"><div><h3 class="show-name">'+esc(s.name)+'</h3><p class="show-en num">'+esc(s.en)+' · '+s.year+' · '+esc(s.net)+'</p></div>'
+    +'<div class="tag-row"><span class="genre">'+GENRE_NAME[s.genre]+'</span>'+(done?'<span class="genre genre-done">'+ICON_CHECK+'已看完</span>':'')+'</div></div>'
+    +'<div class="prog-row"><div class="bar" role="img" aria-label="进度：'+cnt+' 集，共 '+tt+' 集"><i style="width:'+pct+'%"></i></div><span class="prog-num num">'+cnt+' / '+tt+'</span></div>'
+    +'<div class="show-ops"><div class="seg" role="group" aria-label="《'+esc(s.name)+'》的状态">'+segs+'</div>'
+    +'<button class="eps-toggle" data-action="toggle-expand" data-id="'+s.id+'" aria-expanded="'+open+'" aria-controls="eps-'+s.id+'">'+(open?'收起':'选集')+ICON_CHEV+'</button></div>'
+    +'<div class="eps" id="eps-'+s.id+'"'+(open?'':' hidden')+'>'
+    +'<div class="season-row"><div class="s-chips">'+chips+'</div><div class="bulk"><button class="mini" data-action="bulk" data-id="'+s.id+'" data-s="'+sel+'" data-v="1">整季已看</button><button class="mini mini-danger" data-action="bulk" data-id="'+s.id+'" data-s="'+sel+'" data-v="0">清空本季</button></div></div>'
+    +'<div class="ep-grid" role="group" aria-label="第'+sel+'季分集">'+eps+'</div>'
+    +(s.note?'<p class="show-note">注：'+esc(s.note)+'</p>':'')
+    +'</div></article>';
+}
+function renderLibrary(){
+  var list=[],i,s;
+  for(i=0;i<SHOWS.length;i++){
+    s=SHOWS[i];
+    if(ui.tab!=='all'&&store.status[s.id]!==ui.tab)continue;
+    if(ui.genre!=='all'&&s.genre!==ui.genre)continue;
+    if(ui.q&&((s.name+' '+s.en).toLowerCase().indexOf(ui.q)<0))continue;
+    list.push(s);
+  }
+  $('libCount').textContent='共 '+list.length+' 部';
+  var tabs=document.querySelectorAll('#statusTabs .tab');
+  for(i=0;i<tabs.length;i++)tabs[i].classList.toggle('is-on',tabs[i].getAttribute('data-v')===ui.tab);
+  var chips=document.querySelectorAll('#genreChips .chip');
+  for(i=0;i<chips.length;i++)chips[i].classList.toggle('is-on',chips[i].getAttribute('data-v')===ui.genre);
+  if(!list.length){
+    $('libGrid').innerHTML='<div class="card lib-empty" style="grid-column:1/-1"><p class="empty-t">没有符合条件的剧</p><p class="empty-d">换个关键词，或清除筛选再看看。</p><button class="btn-link" data-action="clear-filters">清除筛选</button></div>';
+    return;
+  }
+  var html='';
+  for(i=0;i<list.length;i++)html+=showCard(list[i]);
+  $('libGrid').innerHTML=html;
+}
+function compressEps(list){
+  list.sort(function(a,b){return a.s-b.s||a.e-b.e;});
+  var out=[],i=0;
+  while(i<list.length){
+    var j=i;
+    while(j+1<list.length&&list[j+1].s===list[i].s&&list[j+1].e===list[j].e+1)j++;
+    out.push(j>i?('S'+list[i].s+'E'+list[i].e+'–E'+list[j].e):('S'+list[i].s+'E'+list[i].e));
+    i=j+1;
+  }
+  return out.join('、');
+}
+function renderLog(){
+  var el=$('logList');
+  if(!store.log.length){
+    el.innerHTML='<div class="log-empty" style="text-align:center"><p class="empty-t">还没有打卡记录</p><p class="empty-d">看完一集，回来点一下「打卡」，这里就会留下你的观剧足迹。</p></div>';
+    return;
+  }
+  var groups={},order=[];
+  for(var i=0;i<store.log.length;i++){
+    var x=store.log[i],k=x.d+'|'+x.id;
+    if(!groups[k]){groups[k]=[];order.push(k);}
+    groups[k].push({s:x.s,e:x.e});
+  }
+  var html='';
+  for(var r=0;r<order.length&&r<12;r++){
+    var parts=order[r].split('|'),d=parts[0],s=byId(parts[1]);
+    html+='<div class="log-row"><span class="log-date num">'+cnDate(d)+'</span><span class="log-show">《'+esc(s?s.name:'?')+'》</span><span class="log-eps num">'+compressEps(groups[order[r]])+'</span></div>';
+  }
+  if(order.length>12)html+='<p class="log-more">只显示最近 12 组记录，更早的都在备份文件里。</p>';
+  el.innerHTML=html;
+}
+function renderAll(){renderStats();renderHero();renderLibrary();renderLog();}
 
+/* ================= 动作 ================= */
+function autoWatching(id){if(!store.status[id])store.status[id]='watching';}
+function checkin(id){
+  var s=byId(id),nx=firstUnwatched(s);
+  if(!nx)return;
+  setW(id,nx.s,nx.e,true);
+  autoWatching(id);
+  store.log.unshift({d:todayStr(),id:id,s:nx.s,e:nx.e});
+  save();renderAll();
+  showToast('已打卡《'+s.name+'》 S'+nx.s+'E'+nx.e,function(){undoEp(id,nx.s,nx.e);});
+}
+function undoEp(id,s,e){
+  for(var i=0;i<store.log.length;i++){
+    if(store.log[i].id===id&&store.log[i].s===s&&store.log[i].e===e){store.log.splice(i,1);break;}
+  }
+  setW(id,s,e,false);
+  save();renderAll();
+}
+var toastTimer=null;
+function showToast(text,undo){
+  var t=$('toast');
+  t.innerHTML='';
+  var sp=document.createElement('span');
+  sp.textContent=text;
+  t.appendChild(sp);
+  if(undo){
+    var b=document.createElement('button');
+    b.className='toast-btn';b.type='button';b.textContent='撤销';
+    b.addEventListener('click',function(){hideToast();undo();});
+    t.appendChild(b);
+  }
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(hideToast,6000);
+}
+function hideToast(){$('toast').classList.remove('show');clearTimeout(toastTimer);}
+var lastFocus=null;
+function openDialog(){lastFocus=document.activeElement;$('overlay').hidden=false;$('dlgCancel').focus();}
+function closeDialog(){$('overlay').hidden=true;if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+function doExport(){
+  var data={version:1,exported_at:new Date().toISOString(),status:store.status,watched:store.watched,log:store.log};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='英剧打卡备份-'+todayStr()+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},3000);
+  showToast('备份已导出，注意保存好文件');
+}
+function sanitize(){
+  var ids={},i;
+  for(i=0;i<SHOWS.length;i++)ids[SHOWS[i].id]=SHOWS[i];
+  var w={};
+  for(var k in store.watched){
+    if(!ids[k]||!Array.isArray(store.watched[k]))continue;
+    var s=ids[k],arr=[];
+    for(i=0;i<store.watched[k].length;i++){
+      var m=/^(\d+)-(\d+)$/.exec(store.watched[k][i]);
+      if(m){var sn=+m[1],en=+m[2];if(sn>=1&&sn<=s.seasons.length&&en>=1&&en<=s.seasons[sn-1])arr.push(sn+'-'+en);}
+    }
+    w[k]=arr;
+  }
+  store.watched=w;
+  var st={};
+  for(k in store.status){
+    if(ids[k]&&(store.status[k]==='wishlist'||store.status[k]==='watching'||store.status[k]==='done'))st[k]=store.status[k];
+  }
+  store.status=st;
+  var log=[];
+  for(i=0;i<store.log.length;i++){
+    var x=store.log[i];
+    if(x&&ids[x.id]&&typeof x.d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.d)&&typeof x.s==='number'&&typeof x.e==='number')log.push({d:x.d,id:x.id,s:x.s,e:x.e});
+  }
+  store.log=log.slice(0,5000);
+}
+
+/* ================= 事件 ================= */
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-action]');
+  if(!b)return;
+  var a=b.getAttribute('data-action'),id=b.getAttribute('data-id');
+  if(a==='checkin'){checkin(id);return;}
+  if(a==='swap'){ui.swap++;renderHero();return;}
+  if(a==='goto-lib'){document.getElementById('library').scrollIntoView({behavior:'smooth'});return;}
+  if(a==='toggle-expand'){ui.open[id]=!ui.open[id];renderLibrary();return;}
+  if(a==='sel-season'){ui.season[id]=+b.getAttribute('data-s');renderLibrary();return;}
+  if(a==='tab'){ui.tab=b.getAttribute('data-v');renderLibrary();return;}
+  if(a==='genre'){ui.genre=b.getAttribute('data-v');renderLibrary();return;}
+  if(a==='clear-filters'){ui.q='';ui.tab='all';ui.genre='all';$('searchInput').value='';renderLibrary();return;}
+  if(a==='set-status'){
+    var v=b.getAttribute('data-v');
+    if(store.status[id]===v){delete store.status[id];}else{store.status[id]=v;}
+    save();renderAll();return;
+  }
+  if(a==='toggle-ep'){
+    var sn=+b.getAttribute('data-s'),en=+b.getAttribute('data-e'),s=byId(id);
+    if(isW(id,sn,en)){setW(id,sn,en,false);save();renderAll();}
+    else{
+      setW(id,sn,en,true);autoWatching(id);
+      store.log.unshift({d:todayStr(),id:id,s:sn,e:en});
+      save();renderAll();
+      showToast('已打卡《'+s.name+'》 S'+sn+'E'+en,function(){undoEp(id,sn,en);});
+    }
+    return;
+  }
+  if(a==='bulk'){
+    var sn2=+b.getAttribute('data-s'),mark=b.getAttribute('data-v')==='1',s2=byId(id),n=0;
+    for(var e=1;e<=s2.seasons[sn2-1];e++){
+      if(mark&&!isW(id,sn2,e)){setW(id,sn2,e,true);store.log.unshift({d:todayStr(),id:id,s:sn2,e:e});autoWatching(id);n++;}
+      if(!mark&&isW(id,sn2,e)){setW(id,sn2,e,false);n++;}
+    }
+    if(!n){showToast('第'+sn2+'季没有需要改动的集');return;}
+    save();renderAll();
+    showToast(mark?('已标记《'+s2.name+'》第'+sn2+'季 '+n+' 集为已看'):('已清空《'+s2.name+'》第'+sn2+'季 '+n+' 集的标记'));
+    return;
+  }
+  if(a==='export'){doExport();return;}
+  if(a==='import'){$('importFile').click();return;}
+  if(a==='reset'){openDialog();return;}
+  if(a==='reset-cancel'){closeDialog();return;}
+  if(a==='reset-confirm'){
+    store={status:{},watched:{},log:[]};
+    save();renderAll();closeDialog();
+    showToast('已清空全部打卡数据');
+    return;
+  }
+});
+document.addEventListener('keydown',function(ev){
+  if(ev.key==='Escape'&&!$('overlay').hidden)closeDialog();
+});
+$('searchInput').addEventListener('input',function(){
+  ui.q=this.value.trim().toLowerCase();
+  renderLibrary();
+});
+$('importFile').addEventListener('change',function(ev){
+  var f=ev.target.files&&ev.target.files[0];
+  this.value='';
+  if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var o=JSON.parse(r.result);
+      if(!o||typeof o!=='object'||o.version!==1||!o.watched||typeof o.watched!=='object'||!o.status||typeof o.status!=='object'||!Array.isArray(o.log))throw new Error('format');
+      store={status:o.status,watched:o.watched,log:o.log};
+      sanitize();save();renderAll();
+      $('importMsg').hidden=true;
+      showToast('备份已导入，进度已恢复');
+    }catch(err){
+      var m=$('importMsg');
+      m.hidden=false;
+      m.textContent='导入失败：这个文件不是本站导出的有效备份（需要包含 version、watched、status、log 字段）。请重新选择由「导出备份」生成的 .json 文件。';
+    }
+  };
+  r.onerror=function(){
+    var m=$('importMsg');
+    m.hidden=false;
+    m.textContent='导入失败：文件读取未成功，请重试一次。';
+  };
+  r.readAsText(f);
+});
+
+/* ================= 启动 ================= */
+save();
+renderAll();
 </script>
 </body>
 </html>
